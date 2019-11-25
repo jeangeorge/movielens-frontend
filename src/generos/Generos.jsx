@@ -256,7 +256,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function EnhancedTable() {
-  const url = "http://localhost:4000/api/generos";
+  const url = "https://ibd-movielens-backend.herokuapp.com/api/generos";
   const [rows, setRows] = useState([]);
 
   const classes = useStyles();
