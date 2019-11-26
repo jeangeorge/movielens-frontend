@@ -131,7 +131,7 @@ export default function PermanentDrawerLeft() {
             <ListItem
               button
               key={text}
-              href={"#/consulta-obrigatoria/" + (index + 1)}
+              href={"#/consulta-obrigatoria/" + parseInt(index + 1)}
               component="a"
             >
               <ListItemIcon>
