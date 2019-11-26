@@ -128,7 +128,12 @@ export default function PermanentDrawerLeft() {
             "Consulta 9",
             "Consulta 10"
           ].map((text, index) => (
-            <ListItem button key={text}>
+            <ListItem
+              button
+              key={text}
+              href={"#/consulta-obrigatoria/" + (index + 1)}
+              component="a"
+            >
               <ListItemIcon>
                 <OpenInNew />
               </ListItemIcon>

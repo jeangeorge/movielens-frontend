@@ -17,6 +17,26 @@ import TextField from "@material-ui/core/TextField";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 
+function formatDate(date) {
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var ampm = hours >= 12 ? "pm" : "am";
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+  var strTime = hours + ":" + minutes + " " + ampm;
+  var mes = "" + (date.getMonth() + 1);
+  return (
+    date.getDate() +
+    "/" +
+    (mes.length === 1 ? "0" + mes : mes) +
+    "/" +
+    date.getFullYear() +
+    "  " +
+    strTime
+  );
+}
+
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -44,8 +64,27 @@ function getSorting(order, orderBy) {
 }
 
 const headCells = [
-  { id: "id_filme", numeric: true, disablePadding: true, label: "id_filme" },
-  { id: "id_genero", numeric: true, disablePadding: true, label: "id_genero" }
+  {
+    id: "Titulo do Filme",
+    numeric: false,
+    disablePadding: true,
+    label: "Título do Filme",
+    width: "70%"
+  },
+  {
+    id: "Gênero",
+    numeric: false,
+    disablePadding: true,
+    label: "Gênero",
+    width: "20%"
+  },
+  {
+    id: "Nota",
+    numeric: false,
+    disablePadding: true,
+    label: "Nota",
+    width: "10%"
+  }
 ];
 
 function EnhancedTableHead(props) {
@@ -67,8 +106,9 @@ function EnhancedTableHead(props) {
         {headCells.map(headCell => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? "center" : "left"}
+            align={headCell.numeric ? "right" : "left"}
             sortDirection={orderBy === headCell.id ? order : false}
+            width={headCell.width}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -129,19 +169,29 @@ const EnhancedTableToolbar = props => {
         [classes.highlight]: numSelected > 0
       })}
     >
-      {numSelected > 0 ? (
-        <Typography
-          className={classes.title}
-          color="inherit"
-          variant="subtitle1"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography className={classes.title} variant="h6" id="tableTitle">
-          Filme-Gênero
-        </Typography>
-      )}
+      <Grid container>
+        <Grid item sm={12} md={12} xs={12}>
+          <Typography className={classes.title} variant="h6" id="tableTitle">
+            Consulta 7 - Consulta envolvendo a junção de três ou mais relações
+          </Typography>
+        </Grid>
+        <br />
+        <Grid item sm={12} md={12} xs={12}>
+          <Typography variant="body1" id="query">
+            "Para todos os filmes avaliados com nota mínima, selecione o título
+            do filme, seu gênero e o valor da nota mínima."
+          </Typography>
+        </Grid>
+        <br />
+        <Grid item sm={12} md={12} xs={12}>
+          <Typography variant="body1" id="query">
+            <br />
+            SELECT titulo_filme,nome_genero,nota FROM avaliacoes NATURAL JOIN
+            filmes NATURAL JOIN filme_genero NATURAL JOIN generos WHERE nota =
+            (SELECT MIN(nota) FROM avaliacoes)
+          </Typography>
+        </Grid>
+      </Grid>
     </Toolbar>
   );
 };
@@ -179,7 +229,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function EnhancedTable() {
-  const url = "https://ibd-movielens-backend.herokuapp.com/api/filme-genero";
+  const url =
+    "https://ibd-movielens-backend.herokuapp.com/api/consulta-obrigatoria/7";
   const [rows, setRows] = useState([]);
 
   const classes = useStyles();
@@ -283,8 +334,15 @@ export default function EnhancedTable() {
                       key={row.name}
                       selected={isItemSelected}
                     >
-                      <TableCell align="center">{row.id_filme}</TableCell>
-                      <TableCell align="center">{row.id_genero}</TableCell>
+                      <TableCell align="left" width="70%">
+                        {row["Titulo do Filme"]}
+                      </TableCell>
+                      <TableCell align="left" width="20%">
+                        {row["Gênero"]}
+                      </TableCell>
+                      <TableCell align="left" width="10%">
+                        {row["Nota"]}
+                      </TableCell>
                     </TableRow>
                   );
                 })}

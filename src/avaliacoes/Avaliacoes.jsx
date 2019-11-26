@@ -96,7 +96,7 @@ function EnhancedTableHead(props) {
       <TableRow>
         {headCells.map(headCell => (
           <TableCell key={headCell.id}>
-            <TextField fullWidth id="standard-basic" label={headCell.id} />
+            <TextField fullWidth id="standard-basic" label={headCell.label} />
           </TableCell>
         ))}
       </TableRow>

@@ -17,6 +17,26 @@ import TextField from "@material-ui/core/TextField";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 
+function formatDate(date) {
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var ampm = hours >= 12 ? "pm" : "am";
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+  var strTime = hours + ":" + minutes + " " + ampm;
+  var mes = "" + (date.getMonth() + 1);
+  return (
+    date.getDate() +
+    "/" +
+    (mes.length === 1 ? "0" + mes : mes) +
+    "/" +
+    date.getFullYear() +
+    "  " +
+    strTime
+  );
+}
+
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -44,8 +64,27 @@ function getSorting(order, orderBy) {
 }
 
 const headCells = [
-  { id: "id_filme", numeric: true, disablePadding: true, label: "id_filme" },
-  { id: "id_genero", numeric: true, disablePadding: true, label: "id_genero" }
+  {
+    id: "titulo_filme",
+    numeric: false,
+    disablePadding: true,
+    label: "Título do Filme",
+    width: "80%"
+  },
+  {
+    id: "total_avaliacoes",
+    numeric: false,
+    disablePadding: true,
+    label: "Total",
+    width: "10%"
+  },
+  {
+    id: "media_avaliacoes",
+    numeric: false,
+    disablePadding: true,
+    label: "Média",
+    width: "10%"
+  }
 ];
 
 function EnhancedTableHead(props) {
@@ -67,8 +106,9 @@ function EnhancedTableHead(props) {
         {headCells.map(headCell => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? "center" : "left"}
+            align={headCell.numeric ? "right" : "left"}
             sortDirection={orderBy === headCell.id ? order : false}
+            width={headCell.width}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -129,19 +169,34 @@ const EnhancedTableToolbar = props => {
         [classes.highlight]: numSelected > 0
       })}
     >
-      {numSelected > 0 ? (
-        <Typography
-          className={classes.title}
-          color="inherit"
-          variant="subtitle1"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography className={classes.title} variant="h6" id="tableTitle">
-          Filme-Gênero
-        </Typography>
-      )}
+      <Grid container>
+        <Grid item sm={12} md={12} xs={12}>
+          <Typography className={classes.title} variant="h6" id="tableTitle">
+            Consulta 9 - Consulta envolvendo funções de agregação sobre o
+            resultado da junção de pelo menos duas relações
+          </Typography>
+        </Grid>
+        <br />
+        <Grid item sm={12} md={12} xs={12}>
+          <Typography variant="body1" id="query">
+            "Selecione o título de todos os filmes e, para cada filme, selecione
+            a quantidade de avaliações e média de suas avaliações. Ordene pela
+            média de avaliação (decrescente), depois pelo total de avaliações
+            (decrescente) e depois nome do filme (crescente). Considere apenas
+            filmes com mais de 100 avaliações."
+          </Typography>
+        </Grid>
+        <br />
+        <Grid item sm={12} md={12} xs={12}>
+          <Typography variant="body1" id="query">
+            <br />
+            SELECT titulo_filme, COUNT(*) AS total_avaliacoes, AVG(nota) AS
+            media_avaliacoes FROM filmes NATURAL JOIN avaliacoes GROUP BY
+            id_filme HAVING total_avaliacoes > 100 ORDER BY media_avaliacoes
+            DESC, total_avaliacoes DESC, titulo_filme ASC
+          </Typography>
+        </Grid>
+      </Grid>
     </Toolbar>
   );
 };
@@ -179,7 +234,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function EnhancedTable() {
-  const url = "https://ibd-movielens-backend.herokuapp.com/api/filme-genero";
+  const url =
+    "https://ibd-movielens-backend.herokuapp.com/api/consulta-obrigatoria/9";
   const [rows, setRows] = useState([]);
 
   const classes = useStyles();
@@ -283,8 +339,15 @@ export default function EnhancedTable() {
                       key={row.name}
                       selected={isItemSelected}
                     >
-                      <TableCell align="center">{row.id_filme}</TableCell>
-                      <TableCell align="center">{row.id_genero}</TableCell>
+                      <TableCell align="left" width="80%">
+                        {row.titulo_filme}
+                      </TableCell>
+                      <TableCell align="left" width="10%">
+                        {row.total_avaliacoes}
+                      </TableCell>
+                      <TableCell align="left" width="10%">
+                        {row.media_avaliacoes.toFixed(4)}
+                      </TableCell>
                     </TableRow>
                   );
                 })}
