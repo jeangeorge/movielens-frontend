@@ -69,7 +69,14 @@ const headCells = [
     numeric: false,
     disablePadding: true,
     label: "Gênero",
-    width: "100%"
+    width: "90%"
+  },
+  {
+    id: "filmes",
+    numeric: false,
+    disablePadding: true,
+    label: "Quantidade",
+    width: "10%"
   }
 ];
 
@@ -164,14 +171,17 @@ const EnhancedTableToolbar = props => {
         <br />
         <Grid item sm={12} md={12} xs={12}>
           <Typography variant="body1" id="query">
-            "Selecione o nome de todos os gêneros cadastrados"
+            "Selecione o nome de todos os gêneros cadastrados. Selecione também
+            a quantidade de filmes cadastrados por gênero."
           </Typography>
         </Grid>
         <br />
         <Grid item sm={12} md={12} xs={12}>
           <Typography variant="body1" id="query">
             <br />
-            SELECT nome_genero FROM generos ORDER BY nome_genero ASC
+            SELECT nome_genero, count(*) AS filmes FROM generos NATURAL JOIN
+            filme_genero NATURAL JOIN filmes GROUP BY nome_genero ORDER BY
+            nome_genero ASC
           </Typography>
         </Grid>
       </Grid>
@@ -317,8 +327,11 @@ export default function EnhancedTable() {
                       key={row.name}
                       selected={isItemSelected}
                     >
-                      <TableCell align="left" width="100%">
+                      <TableCell align="left" width="90%">
                         {row.nome_genero}
+                      </TableCell>
+                      <TableCell align="left" width="10%">
+                        {row.filmes}
                       </TableCell>
                     </TableRow>
                   );
