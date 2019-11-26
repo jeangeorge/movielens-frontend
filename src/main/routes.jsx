@@ -1,6 +1,12 @@
 import React from "react";
 
-import { Route, Switch, Redirect, HashRouter } from "react-router-dom";
+import {
+  Route,
+  Switch,
+  Redirect,
+  HashRouter,
+  BrowserRouter
+} from "react-router-dom";
 import Avaliacoes from "../avaliacoes/avaliacoes";
 import Filmes from "../filmes/filmes";
 import FilmeGenero from "../filme_genero/FilmeGenero";
@@ -20,52 +26,54 @@ import ConsultaObrigatoria10 from "../consultas_obrigatorias/10";
 
 export default props => (
   <HashRouter>
-    <Route path="/avaliacoes" component={Avaliacoes}></Route>
-    <Route path="/filmes" component={Filmes}></Route>
-    <Route path="/filme-genero" component={FilmeGenero}></Route>
-    <Route path="/generos" component={Generos}></Route>
-    <Route path="/palavras-chave" component={PalavrasChave}></Route>
-    <Route path="/usuarios" component={Usuarios}></Route>
-    <Route
-      path="/consulta-obrigatoria/1"
-      component={ConsultaObrigatoria1}
-    ></Route>
-    <Route
-      path="/consulta-obrigatoria/2"
-      component={ConsultaObrigatoria2}
-    ></Route>
-    <Route
-      path="/consulta-obrigatoria/3"
-      component={ConsultaObrigatoria3}
-    ></Route>
-    <Route
-      path="/consulta-obrigatoria/4"
-      component={ConsultaObrigatoria4}
-    ></Route>
-    <Route
-      path="/consulta-obrigatoria/5"
-      component={ConsultaObrigatoria5}
-    ></Route>
-    <Route
-      path="/consulta-obrigatoria/6"
-      component={ConsultaObrigatoria6}
-    ></Route>
-    <Route
-      path="/consulta-obrigatoria/7"
-      component={ConsultaObrigatoria7}
-    ></Route>
-    <Route
-      path="/consulta-obrigatoria/8"
-      component={ConsultaObrigatoria8}
-    ></Route>
-    <Route
-      path="/consulta-obrigatoria/9"
-      component={ConsultaObrigatoria9}
-    ></Route>
-    <Route
-      path="/consulta-obrigatoria/10"
-      component={ConsultaObrigatoria10}
-    ></Route>
-    <Redirect from="*" to="/filmes" />
+    <Switch>
+      <Route path="/avaliacoes" component={Avaliacoes}></Route>
+      <Route exact path="/filmes" component={Filmes}></Route>
+      <Route path="/filme-genero" component={FilmeGenero}></Route>
+      <Route path="/generos" component={Generos}></Route>
+      <Route path="/palavras-chave" component={PalavrasChave}></Route>
+      <Route path="/usuarios" component={Usuarios}></Route>
+      <Route
+        path="/consulta-obrigatoria/1"
+        component={ConsultaObrigatoria1}
+      ></Route>
+      <Route
+        path="/consulta-obrigatoria/2"
+        component={ConsultaObrigatoria2}
+      ></Route>
+      <Route
+        path="/consulta-obrigatoria/3"
+        component={ConsultaObrigatoria3}
+      ></Route>
+      <Route
+        path="/consulta-obrigatoria/4"
+        component={ConsultaObrigatoria4}
+      ></Route>
+      <Route
+        path="/consulta-obrigatoria/5"
+        component={ConsultaObrigatoria5}
+      ></Route>
+      <Route
+        path="/consulta-obrigatoria/6"
+        component={ConsultaObrigatoria6}
+      ></Route>
+      <Route
+        path="/consulta-obrigatoria/7"
+        component={ConsultaObrigatoria7}
+      ></Route>
+      <Route
+        path="/consulta-obrigatoria/8"
+        component={ConsultaObrigatoria8}
+      ></Route>
+      <Route
+        path="/consulta-obrigatoria/9"
+        component={ConsultaObrigatoria9}
+      ></Route>
+      <Route
+        path="/consulta-obrigatoria/10"
+        component={ConsultaObrigatoria10}
+      ></Route>
+      <Route component={Filmes} />
+    </Switch>
   </HashRouter>
 );
