@@ -346,7 +346,7 @@ export default function EnhancedTable() {
                         {row.total_avaliacoes}
                       </TableCell>
                       <TableCell align="left" width="10%">
-                        {row.media_avaliacoes.toFixed(4)}
+                        {row.media_avaliacoes.toFixed(5)}
                       </TableCell>
                     </TableRow>
                   );
