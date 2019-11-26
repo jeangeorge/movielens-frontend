@@ -79,10 +79,10 @@ const headCells = [
     width: "50%"
   },
   {
-    id: "nome_genero",
+    id: "generos",
     numeric: false,
     disablePadding: true,
-    label: "Gênero",
+    label: "Gêneros",
     width: "10%"
   },
   {
@@ -105,7 +105,7 @@ function EnhancedTableHead(props) {
       <TableRow>
         {headCells.map(headCell => (
           <TableCell key={headCell.id}>
-            <TextField fullWidth id="standard-basic" />
+            <TextField fullWidth id={headCell.id} label={headCell.label} />
           </TableCell>
         ))}
       </TableRow>
@@ -196,13 +196,13 @@ const EnhancedTableToolbar = props => {
         <Grid item sm={12} md={12} xs={12}>
           <Typography variant="body1" id="query">
             <br />
-            SELECT
-            titulo_filme,ano_lancamento,nome_genero,palavras_chave.palavra_chave_texto
-            AS palavra_chave FROM filmes NATURAL JOIN filme_genero NATURAL JOIN
+            SELECT titulo_filme, ano_lancamento, group_concat(DISTINCT
+            nome_genero) AS generos, palavras_chave.palavra_chave_texto AS
+            palavra_chave FROM filmes NATURAL JOIN filme_genero NATURAL JOIN
             generos INNER JOIN (SELECT * FROM palavras_chave WHERE
             palavra_chave_texto LIKE '%oscar%') AS palavras_chave ON
-            filmes.id_filme = palavras_chave.id_filme ORDER BY ano_lancamento
-            DESC, titulo_filme ASC,nome_genero ASC;
+            filmes.id_filme = palavras_chave.id_filme GROUP BY titulo_filme,
+            ano_lancamento, palavra_chave;
           </Typography>
         </Grid>
       </Grid>
@@ -355,7 +355,7 @@ export default function EnhancedTable() {
                         {row.titulo_filme}
                       </TableCell>
                       <TableCell align="left" width="10%">
-                        {row.nome_genero}
+                        {row.generos}
                       </TableCell>
                       <TableCell align="left" width="30%">
                         {row.palavra_chave}

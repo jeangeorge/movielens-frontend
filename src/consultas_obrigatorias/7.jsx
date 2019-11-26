@@ -72,10 +72,10 @@ const headCells = [
     width: "70%"
   },
   {
-    id: "Gênero",
+    id: "Gêneros",
     numeric: false,
     disablePadding: true,
-    label: "Gênero",
+    label: "Gêneros",
     width: "20%"
   },
   {
@@ -186,9 +186,10 @@ const EnhancedTableToolbar = props => {
         <Grid item sm={12} md={12} xs={12}>
           <Typography variant="body1" id="query">
             <br />
-            SELECT titulo_filme,nome_genero,nota FROM avaliacoes NATURAL JOIN
+            SELECT titulo_filme AS 'Titulo do Filme', group_concat(distinct
+            nome_genero) AS 'Gêneros',nota AS Nota FROM avaliacoes NATURAL JOIN
             filmes NATURAL JOIN filme_genero NATURAL JOIN generos WHERE nota =
-            (SELECT MIN(nota) FROM avaliacoes)
+            (SELECT MIN(nota) FROM avaliacoes) group by titulo_filme, nota;
           </Typography>
         </Grid>
       </Grid>
@@ -338,7 +339,7 @@ export default function EnhancedTable() {
                         {row["Titulo do Filme"]}
                       </TableCell>
                       <TableCell align="left" width="20%">
-                        {row["Gênero"]}
+                        {row["Gêneros"]}
                       </TableCell>
                       <TableCell align="left" width="10%">
                         {row["Nota"]}
